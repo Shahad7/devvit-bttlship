@@ -115,31 +115,6 @@ const BattleshipGame: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8 bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border border-blue-500/30 shadow-2xl shadow-blue-900/20">
-          <ScoreDisplay score={score} />
-          <div className="flex space-x-3">
-            <button
-              onClick={() => setCurrentScreen('menu')}
-              className="px-5 py-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-red-900/30 flex items-center space-x-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span>Exit Game</span>
-            </button>
-          </div>
-        </div>
-
         {/* Game Board */}
         <div className="flex justify-center">
           <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl p-6 border border-blue-500/30 shadow-2xl shadow-blue-900/20 w-full max-w-2xl">
@@ -263,17 +238,52 @@ const BattleshipGame: React.FC = () => {
         />
       )}
       {currentScreen === 'game' && (
-        <>
-          {/* Timer is now fully outside GameScreen */}
-          <div className="max-w-6xl mx-auto mb-6">
-            <div className="flex justify-between items-center bg-black/20 backdrop-blur-sm rounded-lg p-4">
-              <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
-            </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 p-4 relative overflow-hidden">
+          {/* Animated background elements */}
+          <div className="absolute inset-0 z-0">
+            <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+            <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl opacity-15 animate-pulse"></div>
           </div>
 
-          {/* GameScreen still contains ScoreDisplay and all board logic */}
-          <GameScreen />
-        </>
+          <div className="max-w-6xl mx-auto relative z-10">
+            {/* Unified Header with Timer and ScoreDisplay */}
+            <div className="flex justify-between items-center mb-8 bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border border-blue-500/30 shadow-2xl shadow-blue-900/20">
+              <ScoreDisplay score={score} />
+
+              {/* Timer integrated into the header */}
+              <div className="flex items-center space-x-5">
+                <div className="text-center bg-blue-900/30 py-2 px-5 rounded-lg border border-blue-500/20">
+                  <div className="text-white font-mono text-2xl font-bold">
+                    <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
+                  </div>
+                  <div className="text-blue-300 text-sm uppercase tracking-wider mt-1">Time</div>
+                </div>
+
+                <button
+                  onClick={() => setCurrentScreen('menu')}
+                  className="px-5 py-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-red-900/30 flex items-center space-x-2"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>Exit Game</span>
+                </button>
+              </div>
+            </div>
+
+            {/* GameScreen with all board logic */}
+            <GameScreen />
+          </div>
+        </div>
       )}
       {currentScreen === 'scores' && (
         <HighScoreScreen highScores={highScores} setCurrentScreen={setCurrentScreen} />
