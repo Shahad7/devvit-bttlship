@@ -111,11 +111,7 @@ const BattleshipGame: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6 bg-black/20 backdrop-blur-sm rounded-lg p-4">
-          <div className="flex items-center space-x-6">
-            <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
-            <ScoreDisplay score={score} />
-          </div>
-
+          <ScoreDisplay score={score} />
           <div className="flex space-x-2">
             <button
               onClick={() => setCurrentScreen('menu')}
@@ -217,7 +213,19 @@ const BattleshipGame: React.FC = () => {
           setCurrentScreen={setCurrentScreen}
         />
       )}
-      {currentScreen === 'game' && <GameScreen />}
+      {currentScreen === 'game' && (
+        <>
+          {/* Timer is now fully outside GameScreen */}
+          <div className="max-w-6xl mx-auto mb-6">
+            <div className="flex justify-between items-center bg-black/20 backdrop-blur-sm rounded-lg p-4">
+              <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
+            </div>
+          </div>
+
+          {/* GameScreen still contains ScoreDisplay and all board logic */}
+          <GameScreen />
+        </>
+      )}
       {currentScreen === 'scores' && (
         <HighScoreScreen highScores={highScores} setCurrentScreen={setCurrentScreen} />
       )}

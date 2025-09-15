@@ -1,13 +1,14 @@
 import { Clock } from 'lucide-react';
 import { formatTime } from '../helpers';
-import { memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 interface TimerProps {
   gameOver: boolean; //ms
   gameStartTime: number | null;
 }
 
-const Timer: React.FC<TimerProps> = memo(({ gameOver, gameStartTime }) => {
+const Timer: React.FC<TimerProps> = ({ gameOver, gameStartTime }) => {
   const [currentTime, setCurrentTime] = useState<number>(0);
   const frameRef = useRef<number | null>(null);
 
@@ -39,5 +40,5 @@ const Timer: React.FC<TimerProps> = memo(({ gameOver, gameStartTime }) => {
       <span className="font-mono text-xl">{formatTime(currentTime)}</span>
     </div>
   );
-});
-export default Timer;
+};
+export default React.memo(Timer);
