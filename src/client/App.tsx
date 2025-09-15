@@ -107,26 +107,46 @@ const BattleshipGame: React.FC = () => {
   };
 
   const GameScreen: React.FC = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 p-4 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl opacity-15 animate-pulse"></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6 bg-black/20 backdrop-blur-sm rounded-lg p-4">
+        <div className="flex justify-between items-center mb-8 bg-gray-800/70 backdrop-blur-md rounded-2xl p-5 border border-blue-500/30 shadow-2xl shadow-blue-900/20">
           <ScoreDisplay score={score} />
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <button
               onClick={() => setCurrentScreen('menu')}
-              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-colors"
+              className="px-5 py-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-red-900/30 flex items-center space-x-2"
             >
-              Exit Game
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Exit Game</span>
             </button>
           </div>
         </div>
 
         {/* Game Board */}
         <div className="flex justify-center">
-          <div className="bg-black/30 backdrop-blur-sm rounded-xl p-6">
-            <h2 className="text-white text-center text-xl font-bold mb-4">Enemy Waters</h2>
-            <div className="grid grid-cols-10 gap-1 p-4 bg-blue-900/30 rounded-lg">
+          <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl p-6 border border-blue-500/30 shadow-2xl shadow-blue-900/20 w-full max-w-2xl">
+            <h2 className="text-white text-center text-2xl font-bold mb-6 tracking-wider text-shadow shadow-blue-500/50">
+              ENEMY WATERS
+            </h2>
+            <div className="grid grid-cols-10 gap-2 p-5 bg-blue-900/20 rounded-xl border border-blue-400/20">
               {Array.from({ length: 100 }, (_, i) => {
                 const x = Math.floor(i / 10);
                 const y = i % 10;
@@ -134,7 +154,8 @@ const BattleshipGame: React.FC = () => {
                   <div
                     key={`${x}-${y}`}
                     onClick={() => handleCellClick(x, y)}
-                    className={`w-8 h-8 border border-blue-300/30 rounded flex items-center justify-center text-lg transition-all duration-200 ${getCellClass(x, y)}`}
+                    className={`w-10 h-10 flex items-center justify-center text-xl transition-all duration-300 transform hover:scale-105 rounded-lg border-2 ${getCellClass(x, y)}`}
+                    style={{ boxShadow: 'inset 0 0 8px rgba(0,0,0,0.3)' }}
                   >
                     {getCellContent(x, y)}
                   </div>
@@ -144,9 +165,9 @@ const BattleshipGame: React.FC = () => {
 
             {/* Last attack result */}
             {lastAttackResult && (
-              <div className="mt-4 text-center">
+              <div className="mt-6 text-center">
                 <p
-                  className={`text-lg font-bold ${lastAttackResult.hit ? 'text-red-400' : 'text-blue-400'}`}
+                  className={`text-xl font-bold ${lastAttackResult.hit ? 'text-red-300' : 'text-blue-300'} bg-gray-900/70 py-3 px-6 rounded-xl border ${lastAttackResult.hit ? 'border-red-500/30' : 'border-blue-500/30'} backdrop-blur-sm shadow-lg ${lastAttackResult.hit ? 'shadow-red-900/20' : 'shadow-blue-900/20'}`}
                 >
                   {lastAttackResult.hit ? '🎯 HIT!' : '💧 MISS'}
                   {lastAttackResult.sunk && ` - ${lastAttackResult.shipName} SUNK!`}
@@ -158,25 +179,42 @@ const BattleshipGame: React.FC = () => {
 
         {/* Game Over Modal */}
         {gameOver && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-blue-900 rounded-2xl p-8 max-w-md w-full text-center border border-blue-400">
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 backdrop-blur-md">
+            <div className="bg-gradient-to-br from-gray-800 to-blue-900/80 rounded-3xl p-8 max-w-md w-full text-center border-2 border-blue-500/30 shadow-2xl shadow-blue-900/30 backdrop-blur-lg">
               <div className="mb-6">
-                <Trophy className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold text-white mb-2">Victory!</h2>
-                <p className="text-blue-200">All enemy ships destroyed!</p>
+                <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 to-yellow-300 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-500/30">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-12 w-12 text-yellow-800"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-2 tracking-wide">Victory!</h2>
+                <p className="text-blue-300">All enemy ships destroyed!</p>
               </div>
 
-              <div className="bg-black/20 rounded-lg p-4 mb-6">
-                <div className="grid grid-cols-2 gap-4 text-white">
+              <div className="bg-gray-900/50 rounded-xl p-5 mb-6 border border-blue-500/20 backdrop-blur-sm">
+                <div className="grid grid-cols-2 gap-5 text-white">
                   <div>
-                    <div className="text-2xl font-bold">{formatTime(score.time)}</div>
-                    <div className="text-blue-300">Time</div>
+                    <div className="text-2xl font-bold bg-blue-900/30 py-2 rounded-lg">
+                      {formatTime(score.time)}
+                    </div>
+                    <div className="text-blue-300 mt-2 text-sm uppercase tracking-wider">Time</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold">
+                    <div className="text-2xl font-bold bg-blue-900/30 py-2 rounded-lg">
                       {Math.round((score.hits / (score.hits + score.misses)) * 100)}%
                     </div>
-                    <div className="text-blue-300">Accuracy</div>
+                    <div className="text-blue-300 mt-2 text-sm uppercase tracking-wider">
+                      Accuracy
+                    </div>
                   </div>
                 </div>
               </div>
@@ -184,14 +222,25 @@ const BattleshipGame: React.FC = () => {
               <div className="space-y-3">
                 <button
                   onClick={startNewGame}
-                  className="w-full flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-blue-900/30"
                 >
-                  <RotateCcw className="w-5 h-5" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                   <span>Play Again</span>
                 </button>
                 <button
                   onClick={() => setCurrentScreen('menu')}
-                  className="w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-gray-900/30"
                 >
                   Main Menu
                 </button>
