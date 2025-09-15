@@ -1,6 +1,6 @@
 import { Clock } from 'lucide-react';
 import { formatTime } from '../helpers';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 interface TimerProps {
   gameOver: boolean; //ms
@@ -9,18 +9,29 @@ interface TimerProps {
 
 const Timer: React.FC<TimerProps> = memo(({ gameOver, gameStartTime }) => {
   const [currentTime, setCurrentTime] = useState<number>(0);
-  //timer
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (gameStartTime && !gameOver) {
-      interval = setInterval(() => {
-        setCurrentTime(Date.now() - gameStartTime);
-      }, 10);
-    }
+  const frameRef = useRef<number | null>(null);
 
-    return () => {
-      if (interval) clearInterval(interval);
-    };
+  useEffect(() => {
+    if (gameStartTime) {
+      setCurrentTime(0);
+    }
+  }, [gameStartTime]);
+
+  useEffect(() => {
+    if (gameStartTime && !gameOver) {
+      const tick = () => {
+        const elapsed = Date.now() - gameStartTime;
+        setCurrentTime(elapsed);
+        frameRef.current = requestAnimationFrame(tick);
+      };
+
+      frameRef.current = requestAnimationFrame(tick);
+
+      return () => {
+        if (frameRef.current) cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      };
+    }
   }, [gameStartTime, gameOver]);
   return (
     <div className="flex items-center space-x-2 text-white">
