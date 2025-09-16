@@ -1,4 +1,3 @@
-import { Clock } from 'lucide-react';
 import { formatTime } from '../helpers';
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
@@ -35,9 +34,9 @@ const Timer: React.FC<TimerProps> = ({ gameOver, gameStartTime }) => {
     }
   }, [gameStartTime, gameOver]);
   return (
-    <div className="flex items-center space-x-2 text-white">
-      <Clock className="w-5 h-5" />
-      <span className="font-mono text-xl">{formatTime(currentTime)}</span>
+    <div className="text-center bg-blue-900/30 py-1 px-3 rounded-md border border-blue-500/20">
+      <div className="text-white font-mono text-base font-bold">{formatTime(currentTime)}</div>
+      <div className="text-blue-300 text-xs uppercase tracking-wider">TIME</div>
     </div>
   );
 };
