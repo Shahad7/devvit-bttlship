@@ -12,7 +12,6 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ score, gameOver, gameStartTime, setCurrentScreen }) => {
   return (
     <div className="bg-gray-800/70 backdrop-blur-md rounded-lg px-4 py-2 border border-blue-500/30 shadow-lg shadow-blue-900/20 flex-shrink-0 max-w-xs mx-auto w-full">
-      {/* Top row: Hits & Misses */}
       <div className="flex justify-between items-center mb-2">
         <div className="text-center bg-gradient-to-b from-green-700/40 to-green-900/60 py-1 px-2 rounded-md border border-green-500/30 shadow-md shadow-green-900/20 flex-1 mr-1">
           <div className="flex items-center justify-center space-x-1">
@@ -52,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ score, gameOver, gameStartTime, setCurr
         </div>
       </div>
 
-      {/* Bottom row: Timer & Exit */}
+      {/*Timer & Exit */}
       <div className="flex justify-between items-center">
         <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
 

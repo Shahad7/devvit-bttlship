@@ -89,7 +89,9 @@ const BattleshipGame: React.FC = () => {
     if (cell === 'm') return 'bg-gray-500';
     return 'bg-blue-500 hover:bg-blue-400 cursor-pointer';
   };
-  const GameScreen: React.FC = () => (
+
+  //not as a React.FC since it leads to timer flickering when score changes (hacky)
+  const GameScreen = (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 z-0">
@@ -104,7 +106,7 @@ const BattleshipGame: React.FC = () => {
           gameStartTime={gameStartTime}
           setCurrentScreen={setCurrentScreen}
         />
-        {/* GameScreen - Remove duplicate wrapper, direct integration */}
+        {/* Game board*/}
         <div className="flex-1 flex flex-col justify-center py-4">
           <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 mx-auto w-full max-w-xs">
             <h2 className="text-white text-center text-lg font-bold mb-3 tracking-wider text-shadow shadow-blue-500/50">
@@ -132,12 +134,12 @@ const BattleshipGame: React.FC = () => {
               })}
             </div>
 
-            {/* Last attack result - Fixed height to prevent shake */}
+            {/* Last attack result */}
             <LastAttackDetails lastAttackResult={lastAttackResult} />
           </div>
         </div>
 
-        {/* Game Over Modal */}
+        {/* Game Over modal */}
         {gameOver && (
           <GameOver setCurrentScreen={setCurrentScreen} startNewGame={startNewGame} score={score} />
         )}
@@ -145,7 +147,7 @@ const BattleshipGame: React.FC = () => {
     </div>
   );
 
-  // Fixed menu logic with properly aligned mobile layout
+  // menu switch logic
   return (
     <div className="font-mono">
       {currentScreen === 'menu' && (
@@ -157,7 +159,7 @@ const BattleshipGame: React.FC = () => {
         />
       )}
 
-      {currentScreen === 'game' && <GameScreen />}
+      {currentScreen === 'game' && GameScreen}
 
       {currentScreen === 'scores' && (
         <HighScoreScreen highScores={highScores} setCurrentScreen={setCurrentScreen} />
