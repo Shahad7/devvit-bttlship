@@ -43,25 +43,27 @@ const MenuScreen: React.FC<MenuScreenProps> = ({
           className="w-full px-3 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-white placeholder-blue-300/60 focus:outline-none focus:border-blue-400 backdrop-blur-sm transition-all duration-200 text-center text-sm"
         />
 
-        <button
-          onClick={startNewGame}
-          className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-blue-900/30 group"
-        >
-          <div className="bg-blue-500/20 p-1.5 rounded-full group-hover:bg-blue-500/30 transition-colors">
-            <Play className="w-4 h-4 text-blue-300" />
-          </div>
-          <span className="text-sm">START GAME</span>
-        </button>
+        <div className="grid grid-cols-1 gap-3">
+          <button
+            onClick={startNewGame}
+            className="w-full flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-blue-900/30"
+          >
+            <div className="flex items-center justify-center w-5 h-5 bg-blue-500/20 rounded-full flex-shrink-0">
+              <Play className="w-3.5 h-3.5 text-blue-300" />
+            </div>
+            <span className="text-sm whitespace-nowrap flex-1 text-center">START GAME</span>
+          </button>
 
-        <button
-          onClick={() => setCurrentScreen('scores')}
-          className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-900/30 group"
-        >
-          <div className="bg-amber-500/20 p-1.5 rounded-full group-hover:bg-amber-500/30 transition-colors">
-            <Trophy className="w-4 h-4 text-amber-300" />
-          </div>
-          <span className="text-sm">HIGH SCORES</span>
-        </button>
+          <button
+            onClick={() => setCurrentScreen('scores')}
+            className="w-full flex items-center bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-900/30"
+          >
+            <div className="flex items-center justify-center w-5 h-5 bg-amber-500/20 rounded-full flex-shrink-0">
+              <Trophy className="w-3.5 h-3.5 text-amber-300" />
+            </div>
+            <span className="text-sm whitespace-nowrap flex-1 text-center">HIGH SCORES</span>
+          </button>
+        </div>
       </div>
 
       {/* Subtle decorative elements */}
