@@ -1,4 +1,4 @@
-import { AttackResult, GameBoard, Ship, ShipDefinition } from "./shared_types";
+import { AttackResult, GameBoard, Ship, ShipDefinition } from './shared_types';
 
 const formatTime = (timeMs: number): string => {
   const totalSeconds = Math.floor(timeMs / 1000);
@@ -126,7 +126,7 @@ const generateRandomBoard = (): { board: string[][]; ships: Record<string, Ship>
       return generateRandomBoard();
     }
   }
-  // console.log('Final board after placing ships : ', board);
+  console.log('Final board after placing ships : ', board);
 
   //create ship objects
   const ships: Record<string, Ship> = {};
@@ -166,4 +166,4 @@ const createGameBoard = (): GameBoard => {
   };
 };
 
-export { formatTime,createGameBoard, generateRandomBoard, };
+export { formatTime, createGameBoard, generateRandomBoard };

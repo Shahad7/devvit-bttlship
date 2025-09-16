@@ -26,6 +26,7 @@ const BattleshipGame: React.FC = () => {
   const startNewGame = (): void => {
     // console.log('starting new game...');
     setGameBoard(createGameBoard());
+    console.log('setting start time : ' + Date.now());
     setGameStartTime(Date.now());
     setGameOver(false);
     setScore({ hits: 0, misses: 0, time: 0 });
@@ -37,7 +38,6 @@ const BattleshipGame: React.FC = () => {
     if (gameOver || !gameBoard) return;
     // console.log(`coordinates of attack : (${x}, ${y})`);
     const result = gameBoard.receiveAttack(x, y);
-    console.log('attack result:', result);
     if (result.alreadyAttacked) return;
     setScore((prev) => ({
       ...prev,
@@ -51,7 +51,12 @@ const BattleshipGame: React.FC = () => {
     });
 
     if (gameBoard.allShipsSunk()) {
-      const finalTime = Math.floor((Date.now() - (gameStartTime || 0)) / 1000);
+      const currentInstant = Date.now();
+
+      const finalTime = Math.floor(currentInstant - (gameStartTime || 0));
+      console.log(finalTime);
+      console.log(currentInstant);
+      console.log(gameStartTime);
       const accuracy = Math.round(
         ((score.hits + (result.hit ? 1 : 0)) / (score.hits + score.misses + 1)) * 100
       );
