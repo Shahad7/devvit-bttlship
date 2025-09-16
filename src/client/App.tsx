@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import MenuScreen from './components/menu';
 import { GameBoard, Score, ScreenType, HighScore, LastAttackResult } from './shared_types';
-import HighScoreScreen from './components/high-scores';
 import { createGameBoard } from './helpers';
 import Header from './components/header';
 import GameOver from './components/game-over';
 import LastAttackDetails from './components/last-attack-result';
+import Leaderboard from './components/leaderboard';
 
 const BattleshipGame: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('menu');
@@ -167,7 +167,7 @@ const BattleshipGame: React.FC = () => {
       {currentScreen === 'game' && GameScreen}
 
       {currentScreen === 'scores' && (
-        <HighScoreScreen highScores={highScores} setCurrentScreen={setCurrentScreen} />
+        <Leaderboard highScores={highScores} setCurrentScreen={setCurrentScreen} />
       )}
     </div>
   );
