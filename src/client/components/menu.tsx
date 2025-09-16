@@ -61,7 +61,7 @@ const MenuScreen: React.FC<MenuScreenProps> = ({
             <div className="flex items-center justify-center w-5 h-5 bg-amber-500/20 rounded-full flex-shrink-0">
               <Trophy className="w-3.5 h-3.5 text-amber-300" />
             </div>
-            <span className="text-sm whitespace-nowrap flex-1 text-center">HIGH SCORES</span>
+            <span className="text-sm whitespace-nowrap flex-1 text-center">LEADERBOARD</span>
           </button>
         </div>
       </div>
