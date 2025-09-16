@@ -46,7 +46,7 @@ const MenuScreen: React.FC<MenuScreenProps> = ({
         <div className="grid grid-cols-1 gap-3">
           <button
             onClick={startNewGame}
-            className="w-full flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-blue-900/30"
+            className="w-full flex items-center bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white font-medium py-2.5 px-18 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-blue-900/30"
           >
             <div className="flex items-center justify-center w-5 h-5 bg-blue-500/20 rounded-full flex-shrink-0">
               <Play className="w-3.5 h-3.5 text-blue-300" />
@@ -56,7 +56,7 @@ const MenuScreen: React.FC<MenuScreenProps> = ({
 
           <button
             onClick={() => setCurrentScreen('scores')}
-            className="w-full flex items-center bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-900/30"
+            className="w-full flex items-center bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-500 hover:to-orange-600 text-white font-medium py-2.5 px-18 rounded-lg transition-all duration-200 transform hover:-translate-y-0.5 shadow-md shadow-amber-900/30"
           >
             <div className="flex items-center justify-center w-5 h-5 bg-amber-500/20 rounded-full flex-shrink-0">
               <Trophy className="w-3.5 h-3.5 text-amber-300" />
