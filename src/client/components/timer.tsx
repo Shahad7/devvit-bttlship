@@ -34,8 +34,8 @@ const Timer: React.FC<TimerProps> = ({ gameOver, gameStartTime }) => {
     }
   }, [gameStartTime, gameOver]);
   return (
-    <div className="text-center bg-blue-900/30 py-1 px-3 rounded-md border border-blue-500/20">
-      <div className="text-white font-mono text-base font-bold">{formatTime(currentTime)}</div>
+    <div className="text-center bg-blue-900/30 py-1 px-2 rounded-md border border-blue-500/20">
+      <div className="text-white font-mono text-sm font-bold">{formatTime(currentTime)}</div>
       <div className="text-blue-300 text-xs uppercase tracking-wider">TIME</div>
     </div>
   );
