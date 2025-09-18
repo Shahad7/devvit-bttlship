@@ -104,7 +104,7 @@ const BattleshipGame: React.FC = () => {
         <div className="absolute bottom-1/3 right-1/3 w-40 h-40 bg-indigo-500 rounded-full filter blur-2xl opacity-15 animate-pulse"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10 min-h-screen flex flex-col items-center p-2 space-y-4">
+      <div className="max-w-6xl mx-auto relative z-10 flex flex-col items-center p-2 space-y-4">
         {/* Header with same width as game board */}
         <div className="w-full max-w-xs">
           <Header
