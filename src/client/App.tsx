@@ -26,7 +26,6 @@ const BattleshipGame: React.FC = () => {
   const startNewGame = (): void => {
     // console.log('starting new game...');
     setGameBoard(createGameBoard());
-    console.log('setting start time : ' + Date.now());
     setGameStartTime(Date.now());
     setGameOver(false);
     setScore({ hits: 0, misses: 0, time: 0 });
@@ -54,9 +53,6 @@ const BattleshipGame: React.FC = () => {
       const currentInstant = Date.now();
 
       const finalTime = Math.floor(currentInstant - (gameStartTime || 0));
-      console.log(finalTime);
-      console.log(currentInstant);
-      console.log(gameStartTime);
       const accuracy = Math.round(
         ((score.hits + (result.hit ? 1 : 0)) / (score.hits + score.misses + 1)) * 100
       );
@@ -101,24 +97,27 @@ const BattleshipGame: React.FC = () => {
 
   //not as a React.FC since it leads to timer flickering when score changes (hacky)
   const GameScreen = (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden pt-4">
       {/* Animated background elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500 rounded-full filter blur-2xl opacity-20 animate-pulse"></div>
         <div className="absolute bottom-1/3 right-1/3 w-40 h-40 bg-indigo-500 rounded-full filter blur-2xl opacity-15 animate-pulse"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10 min-h-screen flex flex-col p-2">
-        <Header
-          score={score}
-          gameOver={gameOver}
-          gameStartTime={gameStartTime}
-          setCurrentScreen={setCurrentScreen}
-        />
+      <div className="max-w-6xl mx-auto relative z-10 min-h-screen flex flex-col items-center p-2 space-y-4">
+        {/* Header with same width as game board */}
+        <div className="w-full max-w-xs">
+          <Header
+            score={score}
+            gameOver={gameOver}
+            gameStartTime={gameStartTime}
+            setCurrentScreen={setCurrentScreen}
+          />
+        </div>
 
         {/* Main content area */}
-        <div className="flex-1 flex justify-center items-start gap-4 py-2">
-          {/* Game board */}
+        <div className="flex-1 flex justify-center items-start">
+          {/* Game board - aligned with header width */}
           <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 w-full max-w-xs">
             {/* Header with perfect alignment */}
             <div className="flex items-center justify-between mb-3 px-1">
