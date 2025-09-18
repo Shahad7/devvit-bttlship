@@ -116,7 +116,7 @@ const BattleshipGame: React.FC = () => {
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 flex justify-center items-start">
+        <div className="flex-1 flex justify-center items-start w-full max-w-xs">
           {/* Game board - aligned with header width */}
           <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 w-full max-w-xs">
             {/* Header with perfect alignment */}
