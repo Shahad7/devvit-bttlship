@@ -95,28 +95,6 @@ const BattleshipGame: React.FC = () => {
     return 'bg-blue-500 hover:bg-blue-400 cursor-pointer';
   };
 
-  const getGroupedShips = (ships: Record<string, Ship>) => {
-    const groups: Record<
-      string,
-      { type: string; size: number; totalCount: number; sunkCount: number }
-    > = {};
-    Object.values(ships).forEach((ship) => {
-      if (!groups[ship.name]) {
-        groups[ship.name] = {
-          type: ship.name,
-          size: ship.length,
-          totalCount: 0,
-          sunkCount: 0,
-        };
-      }
-      groups[ship.name]!.totalCount++;
-      if (ship.isSunk()) {
-        groups[ship.name]!.sunkCount++;
-      }
-    });
-    return Object.values(groups);
-  };
-
   const getIndividualShips = (ships: Record<string, Ship>) => {
     return Object.values(ships);
   };
