@@ -1,6 +1,6 @@
 import { Trophy } from 'lucide-react';
-import { formatTime } from '../helpers';
-import { HighScore, ScreenType } from '../shared_types';
+import { formatTime } from '../services/helpers';
+import { HighScore, ScreenType } from '../types/shared_types';
 
 interface LeaderboardProps {
   highScores: HighScore[];

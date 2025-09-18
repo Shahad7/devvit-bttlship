@@ -1,4 +1,4 @@
-import { AttackResult, GameBoard, Ship, ShipDefinition } from './shared_types';
+import { AttackResult, GameBoard, Ship, ShipDefinition } from '../types/shared_types';
 
 const formatTime = (timeMs: number): string => {
   const totalSeconds = Math.floor(timeMs / 1000);

@@ -1,4 +1,4 @@
-import { LastAttackResult } from '../shared_types';
+import { LastAttackResult } from '../types/shared_types';
 
 interface LastAttackResultProps {
   lastAttackResult: LastAttackResult | null;

@@ -1,5 +1,5 @@
 import { Play, Trophy, Ship } from 'lucide-react';
-import { ScreenType } from '../shared_types';
+import { ScreenType } from '../types/shared_types';
 
 interface MenuScreenProps {
   playerName: string;
@@ -35,14 +35,6 @@ const MenuScreen: React.FC<MenuScreenProps> = ({
       </div>
 
       <div className="space-y-4">
-        <input
-          type="text"
-          placeholder="Enter commander name"
-          value={playerName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)}
-          className="w-full px-3 py-2 bg-gray-900/50 border border-blue-500/30 rounded-lg text-white placeholder-blue-300/60 focus:outline-none focus:border-blue-400 backdrop-blur-sm transition-all duration-200 text-center text-sm"
-        />
-
         <div className="grid grid-cols-1 gap-3">
           <button
             onClick={startNewGame}

@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import MenuScreen from './components/menu';
-import { GameBoard, Score, ScreenType, HighScore, LastAttackResult, Ship } from './shared_types';
-import { createGameBoard } from './helpers';
+import {
+  GameBoard,
+  Score,
+  ScreenType,
+  HighScore,
+  LastAttackResult,
+  Ship,
+} from './types/shared_types';
+import { createGameBoard } from './services/helpers';
 import Header from './components/header';
 import GameOver from './components/game-over';
 import LastAttackDetails from './components/last-attack-result';
@@ -14,11 +21,11 @@ const BattleshipGame: React.FC = () => {
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [score, setScore] = useState<Score>({ hits: 0, misses: 0, time: 0 });
   const [highScores, setHighScores] = useState<HighScore[]>([
-    { rank: 1, player: 'Admiral Nelson', time: 45, accuracy: 95 },
-    { rank: 2, player: 'Captain Hook', time: 52, accuracy: 88 },
-    { rank: 3, player: 'Sailor Moon', time: 67, accuracy: 82 },
-    { rank: 4, player: 'Pirate Pete', time: 73, accuracy: 79 },
-    { rank: 5, player: 'Sea Wolf', time: 89, accuracy: 75 },
+    { player: 'Admiral Nelson', time: 45, accuracy: 95 },
+    { player: 'Captain Hook', time: 52, accuracy: 88 },
+    { player: 'Sailor Moon', time: 67, accuracy: 82 },
+    { player: 'Pirate Pete', time: 73, accuracy: 79 },
+    { player: 'Sea Wolf', time: 89, accuracy: 75 },
   ]);
   const [lastAttackResult, setLastAttackResult] = useState<LastAttackResult | null>(null);
   const [playerName, setPlayerName] = useState<string>('');
@@ -49,6 +56,7 @@ const BattleshipGame: React.FC = () => {
       ...result,
     });
 
+    // game over check
     if (gameBoard.allShipsSunk()) {
       const currentInstant = Date.now();
 
@@ -60,7 +68,6 @@ const BattleshipGame: React.FC = () => {
       setGameOver(true);
       // Add to high scores if good enough
       const newScore: HighScore = {
-        rank: 0,
         player: playerName || 'Anonymous',
         time: finalTime,
         accuracy,

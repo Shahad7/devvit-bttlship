@@ -1,5 +1,5 @@
-import { formatTime } from '../helpers';
-import { Score, ScreenType } from '../shared_types';
+import { formatTime } from '../services/helpers';
+import { Score, ScreenType } from '../types/shared_types';
 
 interface GameOverProps {
   setCurrentScreen: React.Dispatch<React.SetStateAction<ScreenType>>;

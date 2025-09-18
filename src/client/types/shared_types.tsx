@@ -29,7 +29,6 @@ export interface Score {
 }
 
 export interface HighScore {
-  rank: number;
   player: string;
   time: number;
   accuracy: number;

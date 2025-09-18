@@ -1,5 +1,5 @@
 import React from 'react';
-import { Score, ScreenType } from '../shared_types';
+import { Score, ScreenType } from '../types/shared_types';
 import Timer from './timer';
 
 interface HeaderProps {
@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ score, gameOver, gameStartTime, setCurr
   return (
     <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 flex-shrink-0 w-full max-w-xs mx-auto mt-4">
       <div className="flex items-center justify-between space-x-2">
-        {/* Hits - Made wider */}
+        {/* hits */}
         <div className="text-center bg-gradient-to-b from-green-700/40 to-green-900/60 py-1 px-3 rounded-md border border-green-500/30 shadow-md shadow-green-900/20 flex items-center justify-center space-x-1 h-8 min-w-[50px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +29,7 @@ const Header: React.FC<HeaderProps> = ({ score, gameOver, gameStartTime, setCurr
           </svg>
           <span className="text-green-300 font-bold text-xs leading-none">{score.hits}</span>
         </div>
-
-        {/* Misses - Made wider */}
+        {/* misses */}
         <div className="text-center bg-gradient-to-b from-blue-700/40 to-blue-900/60 py-1 px-3 rounded-md border border-blue-500/30 shadow-md shadow-blue-900/20 flex items-center justify-center space-x-1 h-8 min-w-[50px]">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,12 +46,12 @@ const Header: React.FC<HeaderProps> = ({ score, gameOver, gameStartTime, setCurr
           <span className="text-blue-300 font-bold text-xs leading-none">{score.misses}</span>
         </div>
 
-        {/* Timer with Clock Icon - Same size */}
+        {/* timer */}
         <div className="flex-1 max-w-[120px]">
           <Timer gameOver={gameOver} gameStartTime={gameStartTime} />
         </div>
 
-        {/* Exit Button with Cross Icon - Same size */}
+        {/* exit button */}
         <button
           onClick={() => setCurrentScreen('menu')}
           className="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white rounded-md transition-all duration-300 transform hover:-translate-y-0.5 shadow-md shadow-red-900/30 flex items-center justify-center p-2 h-8 w-8 flex-shrink-0"
