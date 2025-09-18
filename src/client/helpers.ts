@@ -40,9 +40,9 @@ const generateRandomBoard = (): { board: string[][]; ships: Record<string, Ship>
     { notation: 'c3', name: 'Cruiser', length: 3 },
     { notation: 'd1', name: 'Destroyer', length: 2 },
     { notation: 'd2', name: 'Destroyer', length: 2 },
-    { notation: 'd3', name: 'Destroyer', length: 2 },
-    { notation: 'd4', name: 'Destroyer', length: 2 },
-    { notation: 'd5', name: 'Destroyer', length: 2 },
+    // { notation: 'd3', name: 'Destroyer', length: 2 },
+    // { notation: 'd4', name: 'Destroyer', length: 2 },
+    // { notation: 'd5', name: 'Destroyer', length: 2 },
   ];
 
   //Helper function to check if a ship can be placed at given position

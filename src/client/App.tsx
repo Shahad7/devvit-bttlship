@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MenuScreen from './components/menu';
-import { GameBoard, Score, ScreenType, HighScore, LastAttackResult } from './shared_types';
+import { GameBoard, Score, ScreenType, HighScore, LastAttackResult, Ship } from './shared_types';
 import { createGameBoard } from './helpers';
 import Header from './components/header';
 import GameOver from './components/game-over';
@@ -95,6 +95,32 @@ const BattleshipGame: React.FC = () => {
     return 'bg-blue-500 hover:bg-blue-400 cursor-pointer';
   };
 
+  const getGroupedShips = (ships: Record<string, Ship>) => {
+    const groups: Record<
+      string,
+      { type: string; size: number; totalCount: number; sunkCount: number }
+    > = {};
+    Object.values(ships).forEach((ship) => {
+      if (!groups[ship.name]) {
+        groups[ship.name] = {
+          type: ship.name,
+          size: ship.length,
+          totalCount: 0,
+          sunkCount: 0,
+        };
+      }
+      groups[ship.name]!.totalCount++;
+      if (ship.isSunk()) {
+        groups[ship.name]!.sunkCount++;
+      }
+    });
+    return Object.values(groups);
+  };
+
+  const getIndividualShips = (ships: Record<string, Ship>) => {
+    return Object.values(ships);
+  };
+
   //not as a React.FC since it leads to timer flickering when score changes (hacky)
   const GameScreen = (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 relative overflow-hidden">
@@ -111,12 +137,34 @@ const BattleshipGame: React.FC = () => {
           gameStartTime={gameStartTime}
           setCurrentScreen={setCurrentScreen}
         />
-        {/* Game board*/}
-        <div className="flex-1 flex flex-col justify-center py-4">
-          <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 mx-auto w-full max-w-xs">
-            <h2 className="text-white text-center text-lg font-bold mb-3 tracking-wider text-shadow shadow-blue-500/50">
-              ENEMY WATERS
-            </h2>
+
+        {/* Main content area */}
+        <div className="flex-1 flex justify-center items-start gap-4 py-2">
+          {/* Game board */}
+          <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 w-full max-w-xs">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-white text-lg font-bold tracking-wider text-shadow shadow-blue-500/50">
+                ENEMY WATERS
+              </h2>
+
+              {/* Ship Status in 2 columns */}
+              {gameBoard && (
+                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                  {getIndividualShips(gameBoard.ships).map((ship, index) => (
+                    <div key={index} className="flex space-x-0.5">
+                      {Array.from({ length: ship.length }).map((_, i) => (
+                        <div
+                          key={i}
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            i < ship.hits ? 'bg-red-400' : 'bg-blue-400'
+                          }`}
+                        ></div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
             {/* Grid */}
             <div className="grid grid-cols-10 gap-1 p-2 bg-blue-900/20 rounded-md border border-blue-400/20">
@@ -151,7 +199,6 @@ const BattleshipGame: React.FC = () => {
       </div>
     </div>
   );
-
   // menu switch logic
   return (
     <div className="font-mono">
