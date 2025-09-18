@@ -120,14 +120,15 @@ const BattleshipGame: React.FC = () => {
         <div className="flex-1 flex justify-center items-start gap-4 py-2">
           {/* Game board */}
           <div className="bg-gray-800/70 backdrop-blur-md rounded-lg p-3 border border-blue-500/30 shadow-lg shadow-blue-900/20 w-full max-w-xs">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-white text-lg font-bold tracking-wider text-shadow shadow-blue-500/50">
+            {/* Header with perfect alignment */}
+            <div className="flex items-center justify-between mb-3 px-1">
+              <h2 className="text-white text-lg font-bold tracking-wider text-shadow shadow-blue-500/50 flex-shrink-0">
                 ENEMY WATERS
               </h2>
 
-              {/* Ship Status in 2 columns */}
+              {/* Ship Status in 2 columns - aligned to right */}
               {gameBoard && (
-                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 ml-2 flex-shrink-0">
                   {getIndividualShips(gameBoard.ships).map((ship, index) => (
                     <div key={index} className="flex space-x-0.5">
                       {Array.from({ length: ship.length }).map((_, i) => (
