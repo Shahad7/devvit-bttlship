@@ -2,18 +2,11 @@ import { Play, Trophy, Ship } from 'lucide-react';
 import { ScreenType } from '../types/shared_types';
 
 interface MenuScreenProps {
-  playerName: string;
-  setPlayerName: React.Dispatch<React.SetStateAction<string>>;
   startNewGame: () => void;
   setCurrentScreen: React.Dispatch<React.SetStateAction<ScreenType>>;
 }
 
-const MenuScreen: React.FC<MenuScreenProps> = ({
-  playerName,
-  setPlayerName,
-  startNewGame,
-  setCurrentScreen,
-}) => (
+const MenuScreen: React.FC<MenuScreenProps> = ({ startNewGame, setCurrentScreen }) => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 p-4 relative overflow-hidden flex items-center justify-center">
     {/* Animated background elements */}
     <div className="absolute inset-0 z-0">

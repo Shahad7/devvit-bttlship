@@ -188,12 +188,7 @@ const BattleshipGame: React.FC = () => {
   return (
     <div className="font-mono">
       {currentScreen === 'menu' && (
-        <MenuScreen
-          playerName={playerName}
-          setPlayerName={setPlayerName}
-          startNewGame={startNewGame}
-          setCurrentScreen={setCurrentScreen}
-        />
+        <MenuScreen startNewGame={startNewGame} setCurrentScreen={setCurrentScreen} />
       )}
 
       {currentScreen === 'game' && GameScreen}
