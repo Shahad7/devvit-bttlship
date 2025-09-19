@@ -17,6 +17,13 @@ interface LeaderboardEntry {
   rank: number;
 }
 
+interface UserRank {
+  username: string;
+  score: number;
+  accuracy: number;
+  rank: number;
+}
+
 interface LeaderboardResponse {
   page: number;
   totalPages: number;
@@ -31,17 +38,10 @@ interface LeaderboardProps {
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [userRank, setUserRank] = useState<UserRank | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-
-  // Mock user rank data (replace with actual user data)
-  const userRank = {
-    username: 'You',
-    score: 125,
-    accuracy: 85,
-    rank: 42,
-  };
 
   const fetchLeaderboard = async (pageNum: number) => {
     setLoading(true);
@@ -59,8 +59,21 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
     }
   };
 
+  const fetchUserRank = async () => {
+    try {
+      const res = await fetch(`/api/player/score`);
+      if (res.status == 200) {
+        const data: UserRank = await res.json();
+        setUserRank(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch user rank:', err);
+    }
+  };
+
   useEffect(() => {
     fetchLeaderboard(page);
+    fetchUserRank();
   }, [page]);
 
   const prevPage = () => setPage((p) => Math.max(p - 1, 1));
@@ -89,22 +102,24 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
         </div>
 
         {/* User Rank Section */}
-        <div className="mb-3 p-2 bg-blue-900/30 rounded-md border border-blue-500/20">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Crown className="w-4 h-4 text-yellow-400" />
-              <span className="text-white text-sm font-medium">Your Rank</span>
+        {userRank ? (
+          <div className="mb-3 p-2 bg-blue-900/30 rounded-md border border-blue-500/20">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Crown className="w-4 h-4 text-yellow-400" />
+                <span className="text-white text-sm font-medium">Your Rank</span>
+              </div>
+              <div className="text-white font-mono text-sm">#{userRank.rank}</div>
             </div>
-            <div className="text-white font-mono text-sm">#{userRank.rank}</div>
-          </div>
-          <div className="flex justify-between items-center mt-1">
-            <span className="text-blue-300 text-xs">{userRank.username}</span>
-            <div className="flex space-x-3">
-              <span className="text-white text-xs">{formatTime(userRank.score)}</span>
-              <span className="text-green-400 text-xs">{userRank.accuracy}%</span>
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-blue-300 text-xs">{userRank.username}</span>
+              <div className="flex space-x-3">
+                <span className="text-white text-xs">{formatTime(userRank.score)}</span>
+                <span className="text-green-400 text-xs">{userRank.accuracy}%</span>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
         {loading ? (
           <div className="flex justify-center items-center py-8">
@@ -114,7 +129,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           <div className="space-y-1.5 mb-4 max-h-60 overflow-y-auto">
             {entries.map((score) => (
               <div
-                key={score.username}
+                key={`${score.username}-${score.rank}`}
                 className={`flex items-center justify-between p-1.5 rounded-md backdrop-blur-sm border ${
                   score.rank === 1
                     ? 'bg-yellow-600/20 border-yellow-500/40'

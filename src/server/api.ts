@@ -39,6 +39,9 @@ appRouter.get<{ postId: string }, InitResponse | { status: string; message: stri
 
 //get a player score
 appRouter.get('/player/score', async (req, res) => {
+  //dummy
+  const username = await reddit.getCurrentUsername();
+  return res.json({ score: 12, accuracy: 45.78, rank: 23, username });
   try {
     const { postId } = context;
     if (!postId) {
@@ -60,9 +63,9 @@ appRouter.get('/player/score', async (req, res) => {
     const rank = rankRaw !== null && rankRaw != undefined ? rankRaw + 1 : undefined;
     const score = scoreRaw;
     if (accuracy && rank && score) {
-      res.json({ score, accuracy, rank });
+      return res.json({ score, accuracy, rank, username });
     } else {
-      res.status(404);
+      return res.status(404);
     }
   } catch (err) {
     console.error("Couldn't fetch user score");
