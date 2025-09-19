@@ -172,7 +172,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           <div className="flex space-x-1">
             <button
               onClick={firstPage}
-              disabled={page === 1}
+              disabled={page === 1|| entries.length==0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="First Page"
             >
@@ -180,7 +180,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
             <button
               onClick={prevPage}
-              disabled={page === 1}
+              disabled={page === 1 || || entries.length==0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Previous Page"
             >
@@ -198,7 +198,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           <div className="flex space-x-1">
             <button
               onClick={nextPage}
-              disabled={page === totalPages}
+              disabled={page === totalPages || entries.length==0 }
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Next Page"
             >
@@ -206,7 +206,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
             <button
               onClick={lastPage}
-              disabled={page === totalPages}
+              disabled={page === totalPages || entries.length==0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Last Page"
             >
