@@ -59,7 +59,7 @@ appRouter.get('/player/score', async (req, res) => {
     if (accuracy && rank && score) {
       return res.json({ score, accuracy, rank, username });
     } else {
-      return res.status(404);
+      return res.status(404).json({ error: 'Player score not found' });
     }
   } catch (err) {
     console.error("Couldn't fetch user score");
@@ -84,14 +84,14 @@ appRouter.put('/player/score', async (req, res) => {
 
   if (!existingTime || time < existingTime) {
     await redis.zAdd(leaderboardKey, { member: username, score: time });
-    await redis.hSet(accuracyKey, accuracy);
+    await redis.hSet(accuracyKey, { accuracy });
   }
   const updatedScore = await redis.zScore(leaderboardKey, username);
-  const storedAccuracy = await redis.hGet(accuracyKey, username);
-  res.json({
+  const storedAccuracy = await redis.hGet(accuracyKey, 'accuracy');
+  return res.json({
     username,
     time: updatedScore || 0,
-    accuracy: storedAccuracy || 0,
+    accuracy: storedAccuracy ? parseFloat(storedAccuracy) : 0,
   });
 });
 
@@ -128,7 +128,7 @@ appRouter.get('/player/scores', async (req, res) => {
 
     for (const m of members) {
       const [accuracyStr, rankNum] = await Promise.all([
-        redis.hGet(accuracyKey, m.member),
+        redis.hGet(accuracyKey, 'accuracy'),
         redis.zRank(leaderboardKey, m.member),
       ]);
 
@@ -154,156 +154,5 @@ appRouter.get('/player/scores', async (req, res) => {
     res.status(400).json({ status: 'error', message: String(err) });
   }
 });
-
-function dummyPage(page: string, res: any) {
-  if (page == '1') {
-    return res.json({
-      'page': 1,
-      'totalPages': 3,
-      'entries': [
-        {
-          'username': 'user11',
-          'rank': 11,
-          'score': 65,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user12',
-          'rank': 12,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user13',
-          'rank': 13,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user14',
-          'rank': 14,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user15',
-          'rank': 15,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user1',
-          'rank': 1,
-          'score': 417,
-          'accuracy': 100,
-        },
-        {
-          'username': 'user2',
-          'rank': 2,
-          'score': 450,
-          'accuracy': 85,
-        },
-        {
-          'username': 'user3',
-          'rank': 3,
-          'score': 155,
-          'accuracy': 63,
-        },
-        {
-          'username': 'user4',
-          'rank': 4,
-          'score': 191,
-          'accuracy': 91,
-        },
-        {
-          'username': 'user5',
-          'rank': 5,
-          'score': 100,
-          'accuracy': 71,
-        },
-      ],
-      'isFirst': true,
-      'isLast': false,
-    });
-  } else if (page == '2') {
-    return res.json({
-      'page': 2,
-      'totalPages': 3,
-      'entries': [
-        {
-          'username': 'user6',
-          'rank': 6,
-          'score': 65,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user7',
-          'rank': 7,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user8',
-          'rank': 8,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user9',
-          'rank': 9,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user10',
-          'rank': 10,
-          'score': 100,
-          'accuracy': 71,
-        },
-      ],
-      'isFirst': true,
-      'isLast': false,
-    });
-  } else if (page == '3') {
-    return res.json({
-      'page': 3,
-      'totalPages': 3,
-      'entries': [
-        {
-          'username': 'user11',
-          'rank': 11,
-          'score': 65,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user12',
-          'rank': 12,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user13',
-          'rank': 13,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user14',
-          'rank': 14,
-          'score': 100,
-          'accuracy': 71,
-        },
-        {
-          'username': 'user15',
-          'rank': 15,
-          'score': 100,
-          'accuracy': 71,
-        },
-      ],
-      'isFirst': true,
-      'isLast': false,
-    });
-  }
-}
 
 export default appRouter;

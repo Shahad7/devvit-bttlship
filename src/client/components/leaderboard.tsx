@@ -12,7 +12,7 @@ import { ScreenType } from '../types/shared_types';
 
 interface LeaderboardEntry {
   username: string;
-  score: number;
+  time: number;
   accuracy: number;
   rank: number;
 }
@@ -101,7 +101,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           <p className="text-blue-300/90 text-xs">Elite Commanders - Best Performances</p>
         </div>
 
-        {/* User Rank Section */}
+        {/* current user's rank */}
         {userRank ? (
           <div className="mb-3 p-2 bg-blue-900/30 rounded-md border border-blue-500/20">
             <div className="flex items-center justify-between">
@@ -159,7 +159,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2 text-right">
-                  <div className="text-white font-mono text-xs">{formatTime(score.score)}</div>
+                  <div className="text-white font-mono text-xs">{formatTime(score.time)}</div>
                   <div className="text-green-400 font-mono text-xs">{score.accuracy}%</div>
                 </div>
               </div>
@@ -167,12 +167,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           </div>
         )}
 
-        {/* Pagination Controls */}
+        {/* pagination */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-1">
             <button
               onClick={firstPage}
-              disabled={page === 1|| entries.length==0}
+              disabled={page === 1 || entries.length == 0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="First Page"
             >
@@ -180,7 +180,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
             <button
               onClick={prevPage}
-              disabled={page === 1 || || entries.length==0}
+              disabled={page === 1 || entries.length == 0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Previous Page"
             >
@@ -188,7 +188,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
           </div>
 
-          {entries && entries.length >= 1 ? (
+          {entries && entries.length >= 1 && !loading ? (
             <span className="text-white text-xs font-mono">
               Page {page} of {totalPages}
             </span>
@@ -198,7 +198,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
           <div className="flex space-x-1">
             <button
               onClick={nextPage}
-              disabled={page === totalPages || entries.length==0 }
+              disabled={page === totalPages || entries.length == 0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Next Page"
             >
@@ -206,7 +206,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
             <button
               onClick={lastPage}
-              disabled={page === totalPages || entries.length==0}
+              disabled={page === totalPages || entries.length == 0}
               className="p-1 bg-blue-700/50 text-white rounded disabled:opacity-30 transition-colors hover:bg-blue-600/50"
               title="Last Page"
             >

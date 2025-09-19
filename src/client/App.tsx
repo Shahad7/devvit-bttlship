@@ -20,18 +20,10 @@ const BattleshipGame: React.FC = () => {
   const [gameStartTime, setGameStartTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [score, setScore] = useState<Score>({ hits: 0, misses: 0, time: 0 });
-  const [highScores, setHighScores] = useState<HighScore[]>([
-    { player: 'Admiral Nelson', time: 45, accuracy: 95 },
-    { player: 'Captain Hook', time: 52, accuracy: 88 },
-    { player: 'Sailor Moon', time: 67, accuracy: 82 },
-    { player: 'Pirate Pete', time: 73, accuracy: 79 },
-    { player: 'Sea Wolf', time: 89, accuracy: 75 },
-  ]);
   const [lastAttackResult, setLastAttackResult] = useState<LastAttackResult | null>(null);
   const [playerName, setPlayerName] = useState<string>('');
 
   const startNewGame = (): void => {
-    // console.log('starting new game...');
     setGameBoard(createGameBoard());
     setGameStartTime(Date.now());
     setGameOver(false);
@@ -40,9 +32,8 @@ const BattleshipGame: React.FC = () => {
     setCurrentScreen('game');
   };
 
-  const handleCellClick = (x: number, y: number): void => {
+  const handleCellClick = async (x: number, y: number): Promise<void> => {
     if (gameOver || !gameBoard) return;
-    // console.log(`coordinates of attack : (${x}, ${y})`);
     const result = gameBoard.receiveAttack(x, y);
     if (result.alreadyAttacked) return;
     setScore((prev) => ({
@@ -66,18 +57,20 @@ const BattleshipGame: React.FC = () => {
       );
       setScore((prev) => ({ ...prev, time: finalTime }));
       setGameOver(true);
-      // Add to high scores if good enough
+      // add to high scores if good enough
       const newScore: HighScore = {
-        player: playerName || 'Anonymous',
         time: finalTime,
-        accuracy,
+        accuracy: accuracy + '',
       };
 
-      const updatedScores = [...highScores, newScore]
-        .sort((a, b) => a.time - b.time || b.accuracy - a.accuracy)
-        .slice(0, 10)
-        .map((score, index) => ({ ...score, rank: index + 1 }));
-      setHighScores(updatedScores);
+      // send current score to backend to check if it's the new highscore of the current player
+      await fetch(`/api/player/score`, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newScore),
+      });
     }
   };
 

@@ -29,9 +29,8 @@ export interface Score {
 }
 
 export interface HighScore {
-  player: string;
   time: number;
-  accuracy: number;
+  accuracy: number | string;
 }
 
 export interface LastAttackResult extends AttackResult {

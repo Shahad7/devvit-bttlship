@@ -1,10 +1,16 @@
 import { AttackResult, GameBoard, Ship, ShipDefinition } from '../types/shared_types';
 
-const formatTime = (timeMs: number): string => {
-  const totalSeconds = Math.floor(timeMs / 1000);
+const formatTime = (timeMs: number | string): string => {
+  const numericTime = Number(timeMs);
+
+  if (isNaN(numericTime)) {
+    return '0:00.00';
+  }
+
+  const totalSeconds = Math.floor(numericTime / 1000);
   const mins = Math.floor(totalSeconds / 60);
   const secs = totalSeconds % 60;
-  const ms = Math.floor((timeMs % 1000) / 10); // two-digit ms like in games
+  const ms = Math.floor((numericTime % 1000) / 10);
 
   return `${mins}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
 };
@@ -99,9 +105,6 @@ const generateRandomBoard = (): { board: string[][]; ships: Record<string, Ship>
     let placed = false;
     let attempts = 0;
     const maxAttempts = 1000;
-
-    //console.log(`placing ${shipDef.name} (${shipDef.notation}, length: ${shipDef.length})`);
-
     while (!placed && attempts < maxAttempts) {
       const x = Math.floor(Math.random() * 10);
       const y = Math.floor(Math.random() * 10);
@@ -109,9 +112,6 @@ const generateRandomBoard = (): { board: string[][]; ships: Record<string, Ship>
 
       if (canPlaceShip(x, y, shipDef.length, isHorizontal)) {
         placeShip(x, y, shipDef.length, isHorizontal, shipDef.notation);
-        // console.log(
-        //   `placed ${shipDef.name} at (${x},${y}) ${isHorizontal ? 'horizontally' : 'vertically'}`
-        // );
         placed = true;
       } else {
         attempts++;
@@ -120,9 +120,6 @@ const generateRandomBoard = (): { board: string[][]; ships: Record<string, Ship>
 
     //If we couldn't place a ship after many attempts, retry
     if (!placed) {
-      // console.log(
-      //   `failed to place ${shipDef.name} after ${maxAttempts} attempts. Restarting...`
-      // );
       return generateRandomBoard();
     }
   }
