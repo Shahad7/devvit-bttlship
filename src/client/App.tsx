@@ -193,9 +193,7 @@ const BattleshipGame: React.FC = () => {
 
       {currentScreen === 'game' && GameScreen}
 
-      {currentScreen === 'scores' && (
-        <Leaderboard highScores={highScores} setCurrentScreen={setCurrentScreen} />
-      )}
+      {currentScreen === 'scores' && <Leaderboard setCurrentScreen={setCurrentScreen} />}
     </div>
   );
 };
