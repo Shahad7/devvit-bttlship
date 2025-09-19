@@ -1,9 +1,6 @@
-import { ZMember } from '@devvit/protos/.';
 import { context, reddit, redis } from '@devvit/web/server';
 import { Router } from 'express';
-import { MSquare } from 'lucide-react';
 import { InitResponse } from '../shared/types/api';
-import { resolve } from 'node:path';
 
 const appRouter = Router();
 
@@ -39,9 +36,6 @@ appRouter.get<{ postId: string }, InitResponse | { status: string; message: stri
 
 //get a player score
 appRouter.get('/player/score', async (req, res) => {
-  //dummy
-  const username = await reddit.getCurrentUsername();
-  return res.json({ score: 12, accuracy: 45.78, rank: 23, username });
   try {
     const { postId } = context;
     if (!postId) {
@@ -101,12 +95,102 @@ appRouter.put('/player/score', async (req, res) => {
   });
 });
 
+// fetch leaderboard data
+appRouter.get('/player/scores', async (req, res) => {
+  try {
+    const { page = '1' } = req.query as { page?: string };
+    const { postId } = context;
+    const username = await reddit.getCurrentUsername();
+    if (!username) {
+      return res.status(401).json({ error: 'Not logged in' });
+    }
+    if (!postId) return res.status(400).json({ error: 'Missing postId' });
+    const pageNum = parseInt(page, 10) || 1;
+    const pageSize = 10;
+    const leaderboardKey = `leaderboard:${postId}`;
+    const accuracyKey = `${leaderboardKey}:${username}:accuracy`;
+    const start = (pageNum - 1) * pageSize;
+    const end = start + pageSize - 1;
+
+    const members: { member: string; score: number }[] = await redis.zRange(
+      leaderboardKey,
+      start,
+      end
+    );
+    const totalPlayers = await redis.zCard(leaderboardKey);
+
+    if (members.length === 0) {
+      return res.json({ page: pageNum, entries: [], isFirst: pageNum === 1, isLast: true });
+    }
+
+    // Fetch accuracy, score, and rank sequentially
+    const results: Array<{ username: string; time: number; accuracy: number; rank: number }> = [];
+
+    for (const m of members) {
+      const [accuracyStr, rankNum] = await Promise.all([
+        redis.hGet(accuracyKey, m.member),
+        redis.zRank(leaderboardKey, m.member),
+      ]);
+
+      results.push({
+        username: m.member,
+        time: m.score,
+        accuracy: accuracyStr ? parseFloat(accuracyStr) : 0,
+        rank: rankNum !== null && rankNum != undefined ? rankNum + 1 : -1,
+      });
+    }
+
+    const totalPages = Math.ceil(totalPlayers / pageSize);
+
+    res.json({
+      page: pageNum,
+      totalPages: totalPages,
+      entries: results,
+      isFirst: pageNum === 1,
+      isLast: pageNum >= totalPages,
+    });
+  } catch (err) {
+    console.error("Couldn't fetch leaderboard data:", err);
+    res.status(400).json({ status: 'error', message: String(err) });
+  }
+});
+
 function dummyPage(page: string, res: any) {
   if (page == '1') {
     return res.json({
       'page': 1,
       'totalPages': 3,
       'entries': [
+        {
+          'username': 'user11',
+          'rank': 11,
+          'score': 65,
+          'accuracy': 71,
+        },
+        {
+          'username': 'user12',
+          'rank': 12,
+          'score': 100,
+          'accuracy': 71,
+        },
+        {
+          'username': 'user13',
+          'rank': 13,
+          'score': 100,
+          'accuracy': 71,
+        },
+        {
+          'username': 'user14',
+          'rank': 14,
+          'score': 100,
+          'accuracy': 71,
+        },
+        {
+          'username': 'user15',
+          'rank': 15,
+          'score': 100,
+          'accuracy': 71,
+        },
         {
           'username': 'user1',
           'rank': 1,
@@ -221,65 +305,5 @@ function dummyPage(page: string, res: any) {
     });
   }
 }
-
-appRouter.get('/player/scores', async (req, res) => {
-  try {
-    const { page = '1' } = req.query as { page?: string };
-    return dummyPage(page, res);
-    const { postId } = context;
-    const username = await reddit.getCurrentUsername();
-    if (!username) {
-      return res.status(401).json({ error: 'Not logged in' });
-    }
-    if (!postId) return res.status(400).json({ error: 'Missing postId' });
-    const pageNum = parseInt(page, 10) || 1;
-    const pageSize = 5;
-    const leaderboardKey = `leaderboard:${postId}`;
-    const accuracyKey = `${leaderboardKey}:${username}:accuracy`;
-    const start = (pageNum - 1) * pageSize;
-    const end = start + pageSize - 1;
-
-    const members: { member: string; score: number }[] = await redis.zRange(
-      leaderboardKey,
-      start,
-      end
-    );
-    const totalPlayers = await redis.zCard(leaderboardKey);
-
-    if (members.length === 0) {
-      return res.json({ page: pageNum, entries: [], isFirst: pageNum === 1, isLast: true });
-    }
-
-    // Fetch accuracy, score, and rank sequentially
-    const results: Array<{ username: string; time: number; accuracy: number; rank: number }> = [];
-
-    for (const m of members) {
-      const [accuracyStr, rankNum] = await Promise.all([
-        redis.hGet(accuracyKey, m.member),
-        redis.zRank(leaderboardKey, m.member),
-      ]);
-
-      results.push({
-        username: m.member,
-        time: m.score,
-        accuracy: accuracyStr ? parseFloat(accuracyStr) : 0,
-        rank: rankNum !== null && rankNum != undefined ? rankNum + 1 : -1,
-      });
-    }
-
-    const totalPages = Math.ceil(totalPlayers / pageSize);
-
-    res.json({
-      page: pageNum,
-      totalPages: totalPages,
-      entries: results,
-      isFirst: pageNum === 1,
-      isLast: pageNum >= totalPages,
-    });
-  } catch (err) {
-    console.error("Couldn't fetch leaderboard data:", err);
-    res.status(400).json({ status: 'error', message: String(err) });
-  }
-});
 
 export default appRouter;

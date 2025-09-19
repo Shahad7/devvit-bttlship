@@ -188,10 +188,13 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ setCurrentScreen }) => {
             </button>
           </div>
 
-          <span className="text-white text-xs font-mono">
-            Page {page} of {totalPages}
-          </span>
-
+          {entries && entries.length >= 1 ? (
+            <span className="text-white text-xs font-mono">
+              Page {page} of {totalPages}
+            </span>
+          ) : (
+            <span className="text-white text-xs font-mono">No data yet :(</span>
+          )}
           <div className="flex space-x-1">
             <button
               onClick={nextPage}
