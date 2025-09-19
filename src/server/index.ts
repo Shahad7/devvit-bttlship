@@ -16,8 +16,8 @@ const router = express.Router();
 
 router.post('/internal/on-app-install', async (_req, res): Promise<void> => {
   try {
+    const postCount = await redis.incrBy('postCount',1)
     const post = await createPost();
-
     res.json({
       status: 'success',
       message: `Post created in subreddit ${context.subredditName} with id ${post.id}`,
